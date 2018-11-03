@@ -1,3 +1,17 @@
+/*
+* PURPOSE: Store daily trades to InterSystems IRIS using objects.
+* 
+* NOTES: To use locally, make sure to change the IP, port, username, and password
+*   to values for your instance within the connection line: 
+*   xepPersister.connect("127.0.0.1",51773,"USER",user,pass);
+* 
+* When running, 
+* 1. Run option 1: Make a trade on 2016-08-12 for $300/share, 2 shares, and your own name as the trader.
+* 2. Run option 2: Save this trade.
+* 3. Run option 3: Generate 500 generic trades.
+* 4. Run option 4: Retrieve the trade objects from the database again, and update the * names to prepend NYSE- to each stock name.
+* 5. Run option 6: Quit.
+*/
 package Solutions;
 
 import java.sql.SQLException;

@@ -1,3 +1,9 @@
+/*
+* PURPOSE: Makes a connection to an instance of InterSystems IRIS Data Platform.
+* 
+* NOTES: To use locally, make sure to change the IP and port of dbUrl to values for
+*  your instance: jdbc:IRIS://YourIP:YourPort/USER
+*/
 package Solutions;
 
 import java.sql.Connection;

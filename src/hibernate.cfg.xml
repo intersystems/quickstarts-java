@@ -8,7 +8,7 @@
 
         <!-- JDBC Database connection settings -->
         <property name="connection.driver_class">com.intersystems.jdbc.IRISDriver</property>
-        <property name="connection.url">jdbc:IRIS://127.0.0.1:51773/User</property> <!-- 104.197.75.13:17983 -->
+        <property name="connection.url">jdbc:IRIS://127.0.0.1:51773/User</property> 
         <property name="connection.username">SuperUser</property>
         <property name="connection.password">SYS</property>
 

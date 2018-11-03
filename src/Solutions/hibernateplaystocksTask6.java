@@ -1,3 +1,15 @@
+/*
+* PURPOSE: This example shows using Hibernate, a third-party ORM tool, to store trade and trader information to InterSystems IRIS.
+* 
+* NOTES: To use within your IDE, make sure to change IP, port, username, and password
+*   to values for your instance within hibernate.cfg.xml.
+* 
+* When running, 
+* 1. Run option 1: Make a new trade for AMZN on 2016-08-12 with price: 200, # of shares: 2 and your own information at a new trader.
+* 2. Run option 4: Find all traders with your last name.
+* 3. Run option 5: View the leaderboard.
+* 4. Run option 6: Quit.
+*/
 package Solutions;
 
 

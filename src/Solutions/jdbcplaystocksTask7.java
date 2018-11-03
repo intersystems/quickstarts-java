@@ -1,3 +1,14 @@
+/*
+* PURPOSE: Simulate adding stocks to your stock portfolio and see how you would have done.
+* 
+* NOTES: To use locally, change the IP and port of dbUrl to values for your 
+*  instance: jdbc:IRIS://YourIP:YourPort/USER
+* When running the application,
+* 1. Choose option 1 to view top 10 stocks.
+* 2. Choose option 3 to add 2 or 3 stocks to your portfolio (using names from top 10 and 2016-08-12).
+* 3. Choose option 6 using date 2017-08-10 to view your % Gain or Loss after a year.
+*/
+
 package Solutions;
 
 import java.math.BigDecimal;
