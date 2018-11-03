@@ -1,3 +1,15 @@
+/*
+* PURPOSE: Store stock data directly to InterSystems IRIS Data Platform using a custom structure and call methods and
+*  and routines in InterSystems IRIS.
+* 
+* NOTES: To use locally, make sure to change the IP and port of dbUrl to values for
+*  your instance: jdbc:IRIS://YourIP:YourPort/USER
+* When running, 
+* 1. Notice the version of InterSystems IRIS automatically printed. This calls a routine within InterSystems IRIS. 
+* 2. Choose option 2 to store stock data natively.
+* 3. Choose option 3 to retrieve stock data natively.
+* 4. Choose option 4 to generate trades with random data using methods from InterSystems IRIS.
+*/
 package Solutions;
 
 import java.sql.SQLException;

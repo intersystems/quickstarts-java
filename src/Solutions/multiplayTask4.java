@@ -1,3 +1,16 @@
+/*
+* PURPOSE: This example shows using multiple data models side-by-side within your Java application connected to InterSystems IRIS - Relational, Object, and Native access - using the best model for each task.
+* 
+NOTES: To use within your IDE, make sure to change IP, port, username, and password
+*   to values for your instance within the connection line: 
+*   xepPersister.connect("127.0.0.1",51773,"USER",user,pass);
+* 
+* Run multiplayTask4.java. This code store stock company information.
+
+* - JDBC is used to quickly retrieve all distinct stock names from the Demo.Stock table.
+* - Native API is used to call population methods within InterSystems IRIS for founder and mission statement.
+* - XEP is used to store these objects directly to the database, avoiding any translation back to tables.
+*/
 package Solutions;
 
 import java.sql.ResultSet;
