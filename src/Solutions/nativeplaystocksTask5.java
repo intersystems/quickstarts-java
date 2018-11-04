@@ -47,7 +47,7 @@ public class nativeplaystocksTask5 {
 			
 			
 			IRIS irisNative = IRIS.createIRIS(dbconnection);
-			System.out.println("on InterSystems IRIS version: " + irisNative.functionString("PrintVersion","^StocksUtil"));
+			//System.out.println("on InterSystems IRIS version: " + irisNative.functionString("PrintVersion","^StocksUtil"));
 			
 			boolean always = true;
 			Scanner scanner = new Scanner(System.in);
