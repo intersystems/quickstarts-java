@@ -24,6 +24,7 @@ import java.util.Scanner;
 
 import com.intersystems.jdbc.IRISDataSource;
 
+//If you are using a remote instance, update IP and password here
 public class jdbcplaystocksTask7 {
 	
 	public static void main(String[] args) {
