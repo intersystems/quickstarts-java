@@ -1,3 +1,13 @@
+/*
+* PURPOSE: Update portfolio item.
+* 
+* NOTES: When running,
+* 1. Choose option 1 to see list of stocks.
+* 2. Choose option 2 to create portfolio table.
+* 3. Choose option 3 and add stocks using names from the previous list of stocks.
+* 4. Choose option 4 and update one of your portfolio items.
+*/
+
 package Solutions;
 
 import java.math.BigDecimal;
@@ -9,26 +19,49 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Scanner;
+import java.util.HashMap;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 import com.intersystems.jdbc.IRISDataSource;
 
 public class jdbcplaystocksTask5 {
 	
 	public static void main(String[] args) {
-		String dbUrl = "jdbc:IRIS://127.0.0.1:51773/USER";
-		String user = "superuser";
-		String pass = "SYS";
+		// Initialize map to store connection details from config.txt
+	    HashMap<String, String> map = new HashMap<String, String>();
+		try{
+			map = getConfig("config.txt");
+		}
+		catch (IOException e){
+			System.out.println(e.getMessage());
+		}
+
+		// Retrieve connection information
+		String protocol = map.get("protocol");
+		String host = map.get("host");
+		int port = Integer.parseInt(map.get("port"));
+		String namespace = map.get("namespace");
+		String username = map.get("username");
+		String password = map.get("password");
 		
 		try {
-			//Making connection
-			IRISDataSource ds = new IRISDataSource(); 
+			// Using IRISDataSource to connect
+			IRISDataSource ds = new IRISDataSource();
+
+			// Create connection string
+			String dbUrl = protocol + host + ":" + port + "/" + namespace;
 			ds.setURL(dbUrl);
-			ds.setUser(user);
-			ds.setPassword(pass);
+			ds.setUser(username);
+			ds.setPassword(password);
+
+			// Making connection
 			Connection dbconnection = ds.getConnection();
 			System.out.println("Connected to InterSystems IRIS via JDBC.");
 			
-			//Starting interactive prompt
+			// Starting interactive prompt
 			boolean always = true;
 			Scanner scanner = new Scanner(System.in);
 			while (always) {
@@ -40,6 +73,7 @@ public class jdbcplaystocksTask5 {
 				System.out.println("6. View Portfolio");
 				System.out.println("7. Quit");
 				System.out.print("What would you like to do? ");
+
 				String option = scanner.next();
 				switch (option) {
 				case "1":
@@ -96,10 +130,11 @@ public class jdbcplaystocksTask5 {
 			System.out.println(e.getMessage());
 		} 
 	}
+
+	// Find top 10 stocks on a particular date
 	public static void FindTopOnDate(Connection dbconnection, String onDate)
 	{
-		//Find top 10 stocks on a particular date
-		try 
+		try
 		{
 			String sql = "SELECT distinct top 10 transdate,name,stockclose,stockopen,high,low,volume FROM Demo.Stock WHERE transdate= ? ORDER BY stockclose desc";
 			PreparedStatement myStatement = dbconnection.prepareStatement(sql);
@@ -125,6 +160,8 @@ public class jdbcplaystocksTask5 {
 			System.out.println(e.getMessage());
 		}
 	}
+
+	// Create portfolio table
 	public static void CreatePortfolioTable(Connection dbconnection) 
 	{
 		String createTable = "CREATE TABLE Demo.Portfolio(Name varchar(50) unique, PurchaseDate date, PurchasePrice numeric(10,4), Shares int, DateTimeUpdated datetime)";
@@ -139,11 +176,13 @@ public class jdbcplaystocksTask5 {
 			System.out.println("Table not created and likely already exists.");
 			e.getMessage();
 		}
-	}	
+	}
+
+	// Add item to portfolio
 	public static void AddPortfolioItem (Connection dbconnection, String name, String purchaseDate, String price, int shares)
 	{
+	    // Get current time
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		
 		try 
 		{
 			String sql = "INSERT INTO Demo.Portfolio (name,PurchaseDate,PurchasePrice,Shares,DateTimeUpdated) VALUES (?,?,?,?,?)";
@@ -169,6 +208,8 @@ public class jdbcplaystocksTask5 {
 			}
 		}
 	}
+
+	// Update item in portfolio
 	public static void UpdateStock(Connection dbconnection, String stockname, String price, String transDate, int shares)
 	{
 		try 
@@ -198,6 +239,37 @@ public class jdbcplaystocksTask5 {
 			System.out.println("Error updating " + stockname + " : " + e.getMessage());
 		}
 	}
+
+	// Helper method: Get connection details from config file
+	public static HashMap<String, String> getConfig(String filename) throws FileNotFoundException, IOException{
+        // Initial empty map to store connection details
+        HashMap<String, String> map = new HashMap<String, String>();
+
+        String line;
+
+        // Using Buffered Reader to read file
+        BufferedReader reader = new BufferedReader(new InputStreamReader(jdbcplaystocksTask5.class.getResourceAsStream(filename)));
+
+        while ((line = reader.readLine()) != null)
+        {
+            // Remove all spaces and split line based on first colon
+            String[] parts = line.replaceAll("\\s+","").split(":", 2);
+
+            // Check if line contains enough information
+            if (parts.length >= 2)
+            {
+                String key = parts[0];
+                String value = parts[1];
+                map.put(key, value);
+            } else {
+                System.out.println("Ignoring line: " + line);
+            }
+        }
+
+        reader.close();
+
+        return map;
+    }
 	
 }
 	

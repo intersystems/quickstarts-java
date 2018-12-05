@@ -1,9 +1,7 @@
 /*
 * PURPOSE: Simulate adding stocks to your stock portfolio and see how you would have done.
 * 
-* NOTES: To use locally, change the IP and port of dbUrl to values for your 
-*  instance: jdbc:IRIS://YourIP:YourPort/USER
-* When running the application,
+* NOTES: When running the application,
 * 1. Choose option 1 to view top 10 stocks.
 * 2. Choose option 3 to add 2 or 3 stocks to your portfolio (using names from top 10 and 2016-08-12).
 * 3. Choose option 6 using date 2017-08-10 to view your % Gain or Loss after a year.
@@ -21,26 +19,49 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Scanner;
+import java.util.HashMap;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 import com.intersystems.jdbc.IRISDataSource;
 
 public class jdbcplaystocksTask7 {
 	
 	public static void main(String[] args) {
-		String dbUrl = "jdbc:IRIS://127.0.0.1:51773/USER";
-		String user = "superuser";
-		String pass = "SYS";
+		// Initialize map to store connection details from config.txt
+	    HashMap<String, String> map = new HashMap<String, String>();
+		try{
+			map = getConfig("config.txt");
+		}
+		catch (IOException e){
+			System.out.println(e.getMessage());
+		}
+
+		// Retrieve connection information
+		String protocol = map.get("protocol");
+		String host = map.get("host");
+		int port = Integer.parseInt(map.get("port"));
+		String namespace = map.get("namespace");
+		String username = map.get("username");
+		String password = map.get("password");
 		
 		try {
-			//Making connection
+			// Using IRISDataSource to connect
 			IRISDataSource ds = new IRISDataSource(); 
+
+			// Create connection string
+			String dbUrl = protocol + host + ":" + port + "/" + namespace;
 			ds.setURL(dbUrl);
-			ds.setUser(user);
-			ds.setPassword(pass);
+			ds.setUser(username);
+			ds.setPassword(password);
+
+			// Making connection
 			Connection dbconnection = ds.getConnection();
 			System.out.println("Connected to InterSystems IRIS via JDBC.");
 			
-			//Starting interactive prompt
+			// Starting interactive prompt
 			boolean always = true;
 			Scanner scanner = new Scanner(System.in);
 			while (always) {
@@ -52,6 +73,7 @@ public class jdbcplaystocksTask7 {
 				System.out.println("6. View Portfolio");
 				System.out.println("7. Quit");
 				System.out.print("What would you like to do? ");
+
 				String option = scanner.next();
 				switch (option) {
 				case "1":
@@ -112,9 +134,10 @@ public class jdbcplaystocksTask7 {
 			System.out.println(e.getMessage());
 		} 
 	}
+
+	// Find top 10 stocks on a particular date
 	public static void FindTopOnDate(Connection dbconnection, String onDate)
 	{
-		//Find top 10 stocks on a particular date
 		try 
 		{
 			String sql = "SELECT distinct top 10 transdate,name,stockclose,stockopen,high,low,volume FROM Demo.Stock WHERE transdate= ? ORDER BY stockclose desc";
@@ -141,6 +164,8 @@ public class jdbcplaystocksTask7 {
 			System.out.println(e.getMessage());
 		}
 	}
+
+	// Create portfolio table
 	public static void CreatePortfolioTable(Connection dbconnection) 
 	{
 		String createTable = "CREATE TABLE Demo.Portfolio(Name varchar(50) unique, PurchaseDate date, PurchasePrice numeric(10,4), Shares int, DateTimeUpdated datetime)";
@@ -155,11 +180,13 @@ public class jdbcplaystocksTask7 {
 			System.out.println("Table not created and likely already exists.");
 			e.getMessage();
 		}
-	}	
+	}
+
+	// Add item to portfolio
 	public static void AddPortfolioItem (Connection dbconnection, String name, String purchaseDate, String price, int shares)
 	{
+	    // get current time
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		
 		try 
 		{
 			String sql = "INSERT INTO Demo.Portfolio (name,PurchaseDate,PurchasePrice,Shares,DateTimeUpdated) VALUES (?,?,?,?,?)";
@@ -185,10 +212,13 @@ public class jdbcplaystocksTask7 {
 			}
 		}
 	}
+
+	// Update item in portfolio
 	public static void UpdateStock(Connection dbconnection, String stockname, String price, String transDate, int shares)
 	{
 		try 
 		{
+		    // get current time
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 			String sql = "UPDATE Demo.Portfolio SET purchaseDate = ?, purchasePrice= ?, shares = ?, DateTimeUpdated= ? WHERE name= ?";
 			PreparedStatement myStatement = dbconnection.prepareStatement(sql);
@@ -214,6 +244,8 @@ public class jdbcplaystocksTask7 {
 			System.out.println("Error updating " + stockname + " : " + e.getMessage());
 		}
 	}
+
+	// Delete item from portfolio
 	public static void DeleteStock(Connection dbconnection, String stockname)
 	{
 		try 
@@ -222,6 +254,7 @@ public class jdbcplaystocksTask7 {
 			PreparedStatement myStatement =  dbconnection.prepareStatement(sql);
 			myStatement.setString(1, stockname);
 			myStatement.execute();
+
 			int count = myStatement.getUpdateCount();
 			if (count > 0)
 			{
@@ -237,6 +270,8 @@ public class jdbcplaystocksTask7 {
 			System.out.println("Error deleting stock: " + e.getMessage());
 		}
 	}
+
+	// View your portfolio to know % Gain or Loss
 	public static void PortfolioProfile(Connection dbconnection, String sellDate)
 	{
 		BigDecimal cumulStartValue = new BigDecimal(0);
@@ -247,7 +282,9 @@ public class jdbcplaystocksTask7 {
 			PreparedStatement myStatement = dbconnection.prepareStatement(sql);
 			myStatement.setString(1,sellDate);
 			ResultSet myStocksRS = myStatement.executeQuery();
+
 			System.out.println("Name\tPurchase Date\tPurchase Price\tStock Close\tShares\tDatetime Updated\t% Change\tGain or Loss");
+
 			while (myStocksRS.next())
 			{
 				String name = myStocksRS.getString("name");
@@ -256,13 +293,16 @@ public class jdbcplaystocksTask7 {
 				BigDecimal stockClose = myStocksRS.getBigDecimal("stockclose");
 				int shares = myStocksRS.getInt("shares");
 				Timestamp dateTimeUpdated = myStocksRS.getTimestamp("dateTimeUpdated");
+
 				BigDecimal percentChange = stockClose.subtract(purchasePrice).divide(purchasePrice, 4).multiply(new BigDecimal(100));
 				BigDecimal startValue = purchasePrice.multiply(BigDecimal.valueOf(shares));
 				BigDecimal endValue = stockClose.multiply(BigDecimal.valueOf(shares));
 				BigDecimal gainOrLoss = endValue.subtract(startValue).setScale(2, RoundingMode.HALF_UP);
+
 				cumulStartValue = cumulStartValue.add(startValue);
 				cumulEndValue = cumulEndValue.add(endValue);
-				System.out.println(name + "\t" + purchaseDate + "\t" + purchasePrice + "\t" + stockClose + "\t" + shares + "\t" 
+
+				System.out.println(name + "\t" + purchaseDate + "\t" + purchasePrice + "\t" + stockClose + "\t" + shares + "\t"
 						+ dateTimeUpdated + "\t" + percentChange + "\t" + gainOrLoss);
 			}
 		} 
@@ -272,5 +312,35 @@ public class jdbcplaystocksTask7 {
 		}
 	}
 
+	// Helper method: Get connection details from config file
+	public static HashMap<String, String> getConfig(String filename) throws FileNotFoundException, IOException{
+        // Initial empty map to store connection details
+        HashMap<String, String> map = new HashMap<String, String>();
+
+        String line;
+
+        // Using Buffered Reader to read file
+        BufferedReader reader = new BufferedReader(new InputStreamReader(jdbcplaystocksTask7.class.getResourceAsStream(filename)));
+
+        while ((line = reader.readLine()) != null)
+        {
+            // Remove all spaces and split line based on first colon
+            String[] parts = line.replaceAll("\\s+","").split(":", 2);
+
+            // Check if line contains enough information
+            if (parts.length >= 2)
+            {
+                String key = parts[0];
+                String value = parts[1];
+                map.put(key, value);
+            } else {
+                System.out.println("Ignoring line: " + line);
+            }
+        }
+
+        reader.close();
+
+        return map;
+    }
 }
 	
