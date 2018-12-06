@@ -1,4 +1,3 @@
-protocol: jdbc:IRIS://
 host: localhost
 port: 51777
 namespace: user

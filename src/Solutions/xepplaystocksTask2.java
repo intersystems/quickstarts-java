@@ -32,7 +32,7 @@ public class xepplaystocksTask2 {
 			System.out.println(e.getMessage());
 		}
 
-		// Retrieve connection information
+		// Retrieve connection information from configuration file
 		String host = map.get("host");
 		int port = Integer.parseInt(map.get("port"));
 		String namespace = map.get("namespace");

@@ -46,7 +46,7 @@ public class nativeplaystocksTask5 {
 		}
 
 		// Retrieve connection information
-		String protocol = map.get("protocol");
+		String protocol = "jdbc:IRIS://";
 		String host = map.get("host");
 		int port = Integer.parseInt(map.get("port"));
 		String namespace = map.get("namespace");
