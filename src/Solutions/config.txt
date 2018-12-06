@@ -1,5 +1,5 @@
 host: localhost
-port: 51777
+port: 51773
 namespace: user
 username: superuser
 password: SYS
