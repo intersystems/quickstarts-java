@@ -1,3 +1,7 @@
+/*
+* PURPOSE: This class is being used by hibernate class to get stock information
+*/
+
 package Solutions.Demo;
 
 import java.math.BigDecimal;
@@ -17,7 +21,7 @@ public class Stock {
 	private int volume;
 	private String stockName;
 
-	//Constructors
+	// Constructors
 	public Stock(){}
 	public Stock(Date tDate, BigDecimal open, BigDecimal high, BigDecimal low, BigDecimal close, int volume, String stockName) {
 		super();
@@ -29,6 +33,7 @@ public class Stock {
 		this.stockName = stockName;
 	}
 	
+	// Getters and Setters
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long getId() {

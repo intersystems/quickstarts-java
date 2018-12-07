@@ -1,3 +1,7 @@
+/*
+* PURPOSE: This class is being used by hibernate class to generate traders
+*/
+
 package Solutions.Demo;
 
 import java.util.ArrayList;
@@ -14,7 +18,7 @@ public class Person {
 	private List<Trade2> trades = new ArrayList<>();
 	
 
-	//Constructors
+	// Constructors
 	public Person(){}
 	
 	public Person(String firstname, String lastname, String phone) {
@@ -23,8 +27,7 @@ public class Person {
 		this.phone = phone;
 	}
 	
-	
-	//Getters and Setters
+	// Getters and Setters
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long getId() {
