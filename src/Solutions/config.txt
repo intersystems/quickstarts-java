@@ -1,4 +1,4 @@
-host: localhost
+ip: localhost
 port: 51773
 namespace: user
 username: superuser

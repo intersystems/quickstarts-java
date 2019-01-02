@@ -47,7 +47,7 @@ public class nativeplaystocksTask5 {
 
 		// Retrieve connection information
 		String protocol = "jdbc:IRIS://";
-		String host = map.get("host");
+		String ip = map.get("ip");
 		int port = Integer.parseInt(map.get("port"));
 		String namespace = map.get("namespace");
 		String username = map.get("username");
@@ -58,7 +58,7 @@ public class nativeplaystocksTask5 {
 			IRISDataSource ds = new IRISDataSource();
 
 			// Create connection string
-			String dbUrl = protocol + host + ":" + port + "/" + namespace;
+			String dbUrl = protocol + ip + ":" + port + "/" + namespace;
 			ds.setURL(dbUrl);
 			ds.setUser(username);
 			ds.setPassword(password);

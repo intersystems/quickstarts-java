@@ -32,7 +32,7 @@ public class multiplayTask2 {
 		}
 
 		// Retrieve connection information from configuration file
-		String host = map.get("host");
+		String ip = map.get("ip");
 		int port = Integer.parseInt(map.get("port"));
 		String namespace = map.get("namespace");
 		String username = map.get("username");
@@ -43,7 +43,7 @@ public class multiplayTask2 {
 	        EventPersister xepPersister = PersisterFactory.createPersister();
 
 	        // Connecting to database
-	        xepPersister.connect(host,port,namespace,username,password);
+	        xepPersister.connect(ip, port, namespace, username, password);
 	        System.out.println("Connected to InterSystems IRIS via JDBC.");
 
 	        xepPersister.deleteExtent("Solutions.Demo.StockInfo");   // Remove old test data
