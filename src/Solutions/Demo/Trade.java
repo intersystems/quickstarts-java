@@ -1,24 +1,24 @@
+/*
+* PURPOSE: This class is being used by XEP and Native API classes to generate list of trades
+* This generates some trades with default values
+*/
+
 package Solutions.Demo;
 
 import java.math.BigDecimal;
 import java.sql.Date;
 
 public class Trade {
-	
-	//properties
 	public String stockName;
 	public Date purchaseDate;
 	public BigDecimal purchasePrice;
 	public int shares;
 	public String traderName;
 
-	
-	//no arg constructor
+	// Constructors
 	public Trade(){}
 	
-	//arg constructor
 	public Trade(String stockName, Date purchaseDate, BigDecimal purchasePrice, int shares, String traderName) { 
-		//super();
 		this.stockName = stockName;
 		this.purchaseDate = purchaseDate;
 		this.purchasePrice = purchasePrice;

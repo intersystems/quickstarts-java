@@ -1,7 +1,18 @@
+/*
+* PURPOSE: Store test data directly to InterSystems IRIS Data Platform.
+*
+* NOTES: When running, choose option 1 to store and retrieve test data. The test global should be 8888.
+*/
+
 package Solutions;
 
 import java.sql.SQLException;
 import java.util.Scanner;
+import java.util.HashMap;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 import com.intersystems.jdbc.IRISConnection;
 import com.intersystems.jdbc.IRIS;
@@ -10,16 +21,34 @@ import com.intersystems.jdbc.IRISDataSource;
 public class nativeplaystocksTask1 {
 
 	public static void main(String[] args) {
-		String dbUrl = "jdbc:IRIS://127.0.0.1:51773/USER";
-		String user = "SuperUser";
-		String pass = "SYS";
+	    // Initialize map to store connection details from config.txt
+	    HashMap<String, String> map = new HashMap<String, String>();
+		try{
+			map = getConfig("config.txt");
+		}
+		catch (IOException e){
+			System.out.println(e.getMessage());
+		}
+
+		// Retrieve connection information from configuration file
+		String protocol = "jdbc:IRIS://";
+		String ip = map.get("ip");
+		int port = Integer.parseInt(map.get("port"));
+		String namespace = map.get("namespace");
+		String username = map.get("username");
+		String password = map.get("password");
 		
 		try {
-			//Making connection
+			// Using IRISDataSource to connect
 			IRISDataSource ds = new IRISDataSource();
+
+			// Create connection string
+			String dbUrl = protocol + ip + ":" + port + "/" + namespace;
 			ds.setURL(dbUrl);
-			ds.setUser(user);
-			ds.setPassword(pass);
+			ds.setUser(username);
+			ds.setPassword(password);
+
+			// Making connection
 			IRISConnection dbconnection = (IRISConnection) ds.getConnection();
 			System.out.println("Connected to InterSystems IRIS via JDBC.");
 					
@@ -34,6 +63,7 @@ public class nativeplaystocksTask1 {
 				System.out.println("4. Generate Trades");
 				System.out.println("5. Quit");
 				System.out.print("What would you like to do? ");
+
 				String option = scanner.next();
 				switch (option) {
 				case "1":
@@ -61,7 +91,7 @@ public class nativeplaystocksTask1 {
 			irisNative.close();
 	
 		}
-		catch ( SQLException e) 
+		catch (SQLException e)
 		{ 
 			System.out.println("SQL error in application: " + e.getMessage());
 		} 
@@ -70,12 +100,43 @@ public class nativeplaystocksTask1 {
 			System.out.println("Error - Exception thrown: " + e.getMessage());
 		} 
 	}
+
+	// Write to a test global
 	public static void SetTestGlobal(IRIS irisNative)
 	{
-		//Write to a test global
 		irisNative.set(8888, "^testglobal", "1");
 		Integer globalValue = irisNative.getInteger("^testglobal", "1");
 		System.out.println("The value of ^testglobal(1) is " + globalValue);
 	}
-			
+
+	// Helper method: Get connection details from config file
+	public static HashMap<String, String> getConfig(String filename) throws FileNotFoundException, IOException{
+        // Initial empty map to store connection details
+        HashMap<String, String> map = new HashMap<String, String>();
+
+        String line;
+
+        // Using Buffered Reader to read file
+        BufferedReader reader = new BufferedReader(new InputStreamReader(nativeplaystocksTask1.class.getResourceAsStream(filename)));
+
+        while ((line = reader.readLine()) != null)
+        {
+            // Remove all spaces and split line based on first colon
+            String[] parts = line.replaceAll("\\s+","").split(":", 2);
+
+            // Check if line contains enough information
+            if (parts.length >= 2)
+            {
+                String key = parts[0];
+                String value = parts[1];
+                map.put(key, value);
+            } else {
+                System.out.println("Ignoring line: " + line);
+            }
+        }
+
+        reader.close();
+
+        return map;
+    }
 }

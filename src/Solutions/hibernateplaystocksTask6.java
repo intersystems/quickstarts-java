@@ -1,18 +1,18 @@
 /*
 * PURPOSE: This example shows using Hibernate, a third-party ORM tool, to store trade and trader information to InterSystems IRIS.
 * 
-* NOTES: To use within your IDE, make sure to change IP, port, username, and password
-*   to values for your instance within hibernate.cfg.xml.
-* 
-* When running, 
+* NOTES: When running, 
 * 1. Run option 1: Make a new trade for AMZN on 2016-08-12 with price: 200, # of shares: 2 and your own information at a new trader.
 * 2. Run option 4: Find all traders with your last name.
 * 3. Run option 5: View the leaderboard.
 * 4. Run option 6: Quit.
 */
+
 package Solutions;
 
-
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.sql.*;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Scanner;
@@ -26,12 +26,6 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
-
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.sql.*;
-
 import Solutions.Demo.Person;
 import Solutions.Demo.Trade2;
 
@@ -44,7 +38,7 @@ public class hibernateplaystocksTask6 {
         driver.setup();
         System.out.println("Connected to InterSystems IRIS.");
         
-      //Starting interactive prompt
+        // Starting interactive prompt
 		boolean active = true;
 		Scanner scanner = new Scanner(System.in);
 		while (active) {
@@ -129,6 +123,7 @@ public class hibernateplaystocksTask6 {
         driver.exit();
 	}
 	
+	// Setup Hibernate
     protected void setup() {
     	final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
     	        .configure() // configures settings from hibernate.cfg.xml
@@ -142,6 +137,7 @@ public class hibernateplaystocksTask6 {
     	}
     }
 
+    // Create new trade with new trader with full name
     protected void create(String stockName,Date tempDate,BigDecimal price,int shares,String traderFirstName,String traderLastName, String phone) {
     	try {
     		Trade2 trade = new Trade2(stockName, tempDate, price, shares);	
@@ -174,6 +170,8 @@ public class hibernateplaystocksTask6 {
         	System.out.println("Error in creation: " + e.getMessage());
         }
     }
+    
+    // Create new trade with existing trader with ID
     protected void create(String stockName,Date tempDate,BigDecimal price,int shares, Long traderID) {
     	try {
     		Trade2 trade = new Trade2(stockName, tempDate, price, shares);	
@@ -208,6 +206,7 @@ public class hibernateplaystocksTask6 {
         }
     }
 
+    // Delete all traders and their trades
     protected void deleteAll() {
     	Session session = sessionFactory.openSession();
     	
@@ -223,6 +222,7 @@ public class hibernateplaystocksTask6 {
     	System.out.println("All trades and traders deleted from the database.");
     }
 
+    // Get trades by trader ID
     protected void getTraderTrades(long traderID ) {
     	Session session = sessionFactory.openSession();
    	 
@@ -236,6 +236,8 @@ public class hibernateplaystocksTask6 {
         }
         session.close();
     }
+    
+    // Get traders and their trades by traders' last name
     protected void query(String personName) {
     	Session session = sessionFactory.openSession();
     	String hql = "FROM Solutions.Demo.Person where lastname = :lastName";
@@ -258,6 +260,8 @@ public class hibernateplaystocksTask6 {
         
         session.close();	
     }
+    
+    // View the leaderboard of traders based on how much they earned
     protected void displayLeaderboard(){
     	Session session = sessionFactory.openSession();
     	

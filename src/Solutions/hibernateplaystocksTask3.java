@@ -1,25 +1,21 @@
+/*
+* PURPOSE: This example shows using Hibernate, a third-party ORM tool, to delete all traders and trades
+*
+* NOTES: When running the application: Choose option 2 to delete all traders and trades
+*/
+
 package Solutions;
 
-
-
-import java.util.List;
-import java.util.ListIterator;
+import java.math.BigDecimal;
+import java.sql.*;
 import java.util.Scanner;
 import java.util.logging.Level;
-
-import javax.persistence.TypedQuery;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-
-
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.sql.*;
 
 import Solutions.Demo.Person;
 import Solutions.Demo.Trade2;
@@ -33,7 +29,7 @@ public class hibernateplaystocksTask3 {
         driver.setup();
         System.out.println("Connected to InterSystems IRIS.");
         
-      //Starting interactive prompt
+        // Starting interactive prompt
 		boolean active = true;
 		Scanner scanner = new Scanner(System.in);
 		while (active) {
@@ -113,6 +109,7 @@ public class hibernateplaystocksTask3 {
         driver.exit();
 	}
 	
+	// Setup Hibernate
     protected void setup() {
     	final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
     	        .configure() // configures settings from hibernate.cfg.xml
@@ -126,6 +123,7 @@ public class hibernateplaystocksTask3 {
     	}
     }
 
+    // Create new trade with new trader with full name
     protected void create(String stockName,Date tempDate,BigDecimal price,int shares,String traderFirstName,String traderLastName, String phone) {
     	try {
     		Trade2 trade = new Trade2(stockName, tempDate, price, shares);	
@@ -158,6 +156,8 @@ public class hibernateplaystocksTask3 {
         	System.out.println("Error in creation: " + e.getMessage());
         }
     }
+    
+    // Create new trade with existing trader with ID
     protected void create(String stockName,Date tempDate,BigDecimal price,int shares, Long traderID) {
     	try {
     		Trade2 trade = new Trade2(stockName, tempDate, price, shares);	
@@ -192,6 +192,7 @@ public class hibernateplaystocksTask3 {
         }
     }
 
+    // Delete all traders and their trades
     protected void deleteAll() {
     	Session session = sessionFactory.openSession();
     	

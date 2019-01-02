@@ -1,3 +1,7 @@
+/*
+* PURPOSE: This class is being used by hibernate class to generate trades
+*/
+
 package Solutions.Demo;
 
 import java.math.BigDecimal;
@@ -17,7 +21,7 @@ public class Trade2 {
 	private int shares;
 	private Person trader;
 	
-	//Constructors
+	// Constructors
 	public Trade2(){}
 	
 	public Trade2 (String stockName, Date purchaseDate, BigDecimal purchasePrice, int shares) { //, Date transDate
@@ -27,7 +31,7 @@ public class Trade2 {
 		this.shares = shares;
 	}
 	
-	//Getters and Setters
+	// Getters and Setters
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long getId() {
