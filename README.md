@@ -9,8 +9,8 @@ This code shows JDBC, XEP, Native, multimodel, and Hibernate access. It is requi
 * hibernateplaystocksTask6.java to see how to use a third-party tool to work with objects
 
 ## Configuration files
-`config.txt`: contains connection details for JDBC, XEP, Native API and multi-model.
-`hibernate.cfg.xml`: located in *src* folder, contains connections details, parameters and initial settings for Hibernate.
+`config.txt`: contains connection details for JDBC, XEP, Native API and multi-model.  
+`hibernate.cfg.xml`: located in **src** folder, contains connections details, parameters and initial settings for Hibernate.
 
 ## How to Run
 To run this code:
@@ -25,11 +25,11 @@ you need to [load data into your instance](https://github.com/intersystems/Sampl
 3. Clone the repo
 4. With Eclipse,
  
-	* Select File > Import > Git > Projects from Git. Click Next.
+	* Select **File** > **Import** > **Git** > **Projects from Git**. Click **Next**.
 	* Enter URI: https://github.com/intersystems/quickstarts-java
-	* Select the master branch. Click Next.
-	* Choose import existing project. Click Next.
-	* Click Finish.
+	* Select the **master** branch. Click **Next**.
+	* Choose import existing project. Click **Next**.
+	* Click **Finish**.
 	* Open `config.txt` file, located inside the **Solutions** package, and modify the `IP` and `password` to be the correct values for your InterSystems IRIS instance. 
 `Port` and `username` are most likely the defaults but you can verify those as well.
 	* Due to its complexity, **Hibernate** has its own config file named `hibernate.cfg.xml`. Open `hibernate.cfg.xml` file, located inside the **src** folder, and modify the `IP` and `password` to be the correct values for your InterSystems IRIS instance. `Port` and `username` are most likely the defaults but you can verify those as well.
