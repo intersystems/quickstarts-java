@@ -1,11 +1,11 @@
 # quickstarts-java
-This code shows JDBC, XEP, Native, multi-model, and Hibernate access. It is required for the Java quickstart which can be found here: https://learning.intersystems.com/course/view.php?name=Java%20QS 
+This code shows JDBC, XEP, Native, multi-model, and Hibernate access. It is required for the Java QuickStart which can be found here: https://dev-gettingstarted.intersystems.com/language-quickstarts/java-quickstart/ 
 
 ## Contents
 * jdbcplaystocksTask7.java to see how to store and retrieve data relationally
 * xepplaystocksTask6.java to see how to quickly store objects
 * nativeplaystocksTask5.java to see how to run methods within InterSystems IRIS
-* multiplayTask4.java to see multimodel access using JDBC, XEP, and Native API
+* multiplayTask4.java to see multi-model access using JDBC, XEP, and Native API
 * hibernateplaystocksTask6.java to see how to use a third-party tool to work with objects
 
 ## Configuration files
@@ -30,5 +30,5 @@ If you are using InterSystems Labs, the sample stock data is already loaded. You
 
 You should now have several classes for **JDBC**, **XEP**, **Native API**, **multi-model** and **Hibernate** inside the **Solutions** package. 
 
-Detailed instructions are included on the QuickStart page: https://learning.intersystems.com/course/view.php?name=Java%20QS 
+Detailed instructions are included on the QuickStart page: https://dev-gettingstarted.intersystems.com/language-quickstarts/java-quickstart/ 
 
