@@ -145,7 +145,7 @@ public class multimodelplaystocksTask3 {
         String line;
 
         // Using Buffered Reader to read file
-        BufferedReader reader = new BufferedReader(new InputStreamReader(multiplayTask3.class.getResourceAsStream(filename)));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(multimodelplaystocksTask3.class.getResourceAsStream(filename)));
 
         while ((line = reader.readLine()) != null)
         {
