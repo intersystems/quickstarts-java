@@ -17,7 +17,7 @@ import com.intersystems.xep.EventPersister;
 import com.intersystems.xep.PersisterFactory;
 import com.intersystems.jdbc.IRISConnection;
 
-public class multiplayTask2 {
+public class multimodelplaystocksTask2 {
 
 	public static void main(String[] args) {
 		// Initialize map to store connection details from config.txt
