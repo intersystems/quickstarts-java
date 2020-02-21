@@ -41,7 +41,7 @@ public class multimodelplaystocksTask1 {
 
 	        // Connecting to database
 	        xepPersister.connect(ip, port, namespace, username, password);
-	        System.out.println("Connected to InterSystems IRIS via JDBC.");
+	        System.out.println("Connected to InterSystems IRIS.");
 
 	        xepPersister.deleteExtent("Demo.StockInfo");   // Remove old test data
 	        xepPersister.importSchema("Demo.StockInfo");   // Import flat schema

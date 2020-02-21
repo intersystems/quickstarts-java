@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.Scanner;
 
 import com.intersystems.jdbc.IRIS;
 import com.intersystems.xep.Event;
@@ -42,7 +43,7 @@ public class multimodelplaystocksTask2 {
 
 	        // Connecting to database
 	        xepPersister.connect(ip, port, namespace, username, password);
-	        System.out.println("Connected to InterSystems IRIS via JDBC.");
+	        System.out.println("Connected to InterSystems IRIS.");
 
 	        xepPersister.deleteExtent("Demo.StockInfo");   // Remove old test data
 	        xepPersister.importSchema("Demo.StockInfo");   // Import flat schema
@@ -91,7 +92,7 @@ public class multimodelplaystocksTask2 {
 		    xepPersister.close();
 						
 		} catch (SQLException e) {
-			 System.out.println("Error creating stock listing");
+			System.out.println("Error creating stock listing");
 		}
 	        
 	}
@@ -100,12 +101,17 @@ public class multimodelplaystocksTask2 {
 	public static void retrieveStock(Statement myStatement){
 		System.out.println("Generating stock info table...");
 			
+		try{
 		// Get stock names (JDBC)
 		ResultSet myRS = myStatement.executeQuery("SELECT distinct name FROM demo.stock");
 					
 		while(myRS.next())
 		{
 			System.out.println(myRS.getString("name"));		
+		}
+		}
+		catch (SQLException e){
+			System.out.println("There was a problem retrieveing stock: " +e.getMessage());
 		}
 	}
 

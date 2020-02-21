@@ -18,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.InputStreamReader;
+import java.util.Scanner;
 
 import com.intersystems.jdbc.IRIS;
 import com.intersystems.xep.Event;
@@ -53,7 +54,7 @@ public class multimodelplaystocksTask4 {
 
 	        // Connecting to database
 	        xepPersister.connect(ip, port, namespace, username, password);
-	        System.out.println("Connected to InterSystems IRIS via JDBC.");
+	        System.out.println("Connected to InterSystems IRIS.");
 
 	        xepPersister.deleteExtent("Demo.StockInfo");   // Remove old test data
 	        xepPersister.importSchema("Demo.StockInfo");   // Import flat schema
@@ -85,7 +86,7 @@ public class multimodelplaystocksTask4 {
 					generateSampleMissions(myStatement, xepEvent);
 					break;
 				case "3":
-					populateMissions(myStatement, xepEvent);
+					populateMissions(myStatement, xepEvent, irisNative);
 					break;
 				case "4":
 					System.out.println("Exited.");
@@ -109,7 +110,7 @@ public class multimodelplaystocksTask4 {
 	// Query all stock names using ADO.NET
 	public static void retrieveStock(Statement myStatement){
 		System.out.println("Generating stock info table...");
-			
+		try{	
 		// Get stock names (JDBC)
 		ResultSet myRS = myStatement.executeQuery("SELECT distinct name FROM demo.stock");
 					
@@ -117,20 +118,25 @@ public class multimodelplaystocksTask4 {
 		{
 			System.out.println(myRS.getString("name"));		
 		}
+		}
+		catch (SQLException e){
+			System.out.println("There was a problem retrieveing stock: " +e.getMessage());
+		}
 	}
 
 	// Generate and store sample founder and mission statement using XEP
 	public static void generateSampleMissions(Statement myStatement, Event xepEvent){
+		try{
 		// Get stock names (JDBC)
 		ResultSet myRS = myStatement.executeQuery("SELECT distinct name FROM demo.stock");
 											
 		// Create java objects and store to database (XEP)
+		System.out.println("Created stockinfo array.");
 		ArrayList<StockInfo> stocksList = new ArrayList<StockInfo>();
 		while(myRS.next())
 		{
 			StockInfo stock = new StockInfo();
 			stock.name = myRS.getString("name");
-			System.out.println("Created stockinfo array.");
 			
 			// Generate mission and founder names
 			stock.founder = "test founder";
@@ -142,21 +148,25 @@ public class multimodelplaystocksTask4 {
 		StockInfo[] stocksArray = stocksList.toArray(new StockInfo[stocksList.size()]);
 		
 		xepEvent.store(stocksArray);
+		}
+		catch (SQLException e){
+			System.out.println("There was a problem storing missions: " +e.getMessage());
+		}
 	}
 
 	// Use Native API call population methods within InterSystems IRIS to populate values for founder and mission statement
-	public static void populateMissions(Statement myStatement, Event xepEvent){
+	public static void populateMissions(Statement myStatement, Event xepEvent, IRIS irisNative){
+		try{
 		// Get stock names (JDBC)
 		ResultSet myRS = myStatement.executeQuery("SELECT distinct name FROM demo.stock");
-		
-											
+										
 		// Create java objects and store to database (XEP)
+		System.out.println("Created stockinfo array.");
 		ArrayList<StockInfo> stocksList = new ArrayList<StockInfo>();
 		while(myRS.next())
 		{
 			StockInfo stock = new StockInfo();
 			stock.name = myRS.getString("name");
-			System.out.println("created stockinfo array.");
 			
 			// Generate mission and founder names (Native API)
 			stock.founder = irisNative.classMethodString("%PopulateUtils", "Name");
@@ -168,6 +178,10 @@ public class multimodelplaystocksTask4 {
 		StockInfo[] stocksArray = stocksList.toArray(new StockInfo[stocksList.size()]);
 		
 		xepEvent.store(stocksArray);
+		}
+		catch (SQLException e){
+			System.out.println("There was a problem populate missions: " + e.getMessage());
+		}
 	}	
 
 	// Helper method: Get connection details from config file

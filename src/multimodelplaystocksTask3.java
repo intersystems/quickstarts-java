@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Scanner;
 
 import com.intersystems.jdbc.IRIS;
 import com.intersystems.xep.Event;
@@ -46,7 +47,7 @@ public class multimodelplaystocksTask3 {
 
 	        // Connecting to database
 	        xepPersister.connect(ip, port, namespace, username, password);
-	        System.out.println("Connected to InterSystems IRIS via JDBC.");
+	        System.out.println("Connected to InterSystems IRIS.");
 
 	        xepPersister.deleteExtent("Demo.StockInfo");   // Remove old test data
 	        xepPersister.importSchema("Demo.StockInfo");   // Import flat schema
@@ -102,7 +103,7 @@ public class multimodelplaystocksTask3 {
 	// Query all stock names using ADO.NET
 	public static void retrieveStock(Statement myStatement){
 		System.out.println("Generating stock info table...");
-			
+		try{	
 		// Get stock names (JDBC)
 		ResultSet myRS = myStatement.executeQuery("SELECT distinct name FROM demo.stock");
 					
@@ -110,31 +111,40 @@ public class multimodelplaystocksTask3 {
 		{
 			System.out.println(myRS.getString("name"));		
 		}
+		}
+		catch (SQLException e){
+			System.out.println("There was a problem retrieveing stock: " +e.getMessage());
+		}
 	}
 
 	// Generate and store sample founder and mission statement using XEP
 	public static void generateSampleMissions(Statement myStatement, Event xepEvent){
-		// Get stock names (JDBC)
-		ResultSet myRS = myStatement.executeQuery("SELECT distinct name FROM demo.stock");
-											
-		// Create java objects and store to database (XEP)
-		ArrayList<StockInfo> stocksList = new ArrayList<StockInfo>();
-		while(myRS.next())
-		{
-			StockInfo stock = new StockInfo();
-			stock.name = myRS.getString("name");
+		try{
+			// Get stock names (JDBC)
+			ResultSet myRS = myStatement.executeQuery("SELECT distinct name FROM demo.stock");
+												
+			// Create java objects and store to database (XEP)
 			System.out.println("Created stockinfo array.");
+			ArrayList<StockInfo> stocksList = new ArrayList<StockInfo>();
+			while(myRS.next())
+			{
+				StockInfo stock = new StockInfo();
+				stock.name = myRS.getString("name");
+				
+				//generate mission and founder names (Native API)
+				stock.founder = "test founder";
+				stock.mission = "some mission statement";
+				
+				System.out.println("Adding object with name " + stock.name + " founder " + stock.founder + " and mission " + stock.mission);
+				stocksList.add(stock);
+			}
+			StockInfo[] stocksArray = stocksList.toArray(new StockInfo[stocksList.size()]);
 			
-			//generate mission and founder names (Native API)
-			stock.founder = "test founder";
-			stock.mission = "some mission statement";
-			
-			System.out.println("Adding object with name " + stock.name + " founder " + stock.founder + " and mission " + stock.mission);
-			stocksList.add(stock);
+			xepEvent.store(stocksArray);
 		}
-		StockInfo[] stocksArray = stocksList.toArray(new StockInfo[stocksList.size()]);
-		
-		xepEvent.store(stocksArray);
+		catch (SQLException e){
+			System.out.println("There was a problem storing missions: " +e.getMessage());
+		}
 	}	
 
 	// Helper method: Get connection details from config file
