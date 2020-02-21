@@ -1,27 +1,23 @@
 /*
-* PURPOSE: Create StockInfo objects that can be manipulated
+* PURPOSE: Retrieve all stock names from Demo.Stock table using JDBC
 */
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 
 import com.intersystems.jdbc.IRIS;
 import com.intersystems.xep.Event;
 import com.intersystems.xep.EventPersister;
 import com.intersystems.xep.PersisterFactory;
-
-import Demo.StockInfo;
-
 import com.intersystems.jdbc.IRISConnection;
 
-public class multiplayTask3 {
+public class multiplayTask2 {
 
 	public static void main(String[] args) {
 		// Initialize map to store connection details from config.txt
@@ -75,7 +71,7 @@ public class multiplayTask3 {
 					retrieveStock(myStatement);
 					break;
 				case "2":
-					generateSampleMissions(myStatement, xepEvent);
+					System.out.println("TO DO: Generate sample founders and mission statements");
 					break;
 				case "3":
 					System.out.println("TO DO: Populate values for founders and mission statements");
@@ -87,14 +83,15 @@ public class multiplayTask3 {
 				default: 
 					System.out.println("Invalid option. Try again!");
 					break;
-				}	
-	        					
+				}
+			}	
+	        		
 			// Close everything
 		    xepEvent.close();
 		    xepPersister.close();
 						
 		} catch (SQLException e) {
-			 System.out.println("Error creating stock listing: " + e.getMessage());
+			 System.out.println("Error creating stock listing");
 		}
 	        
 	}
@@ -112,31 +109,6 @@ public class multiplayTask3 {
 		}
 	}
 
-	// Generate and store sample founder and mission statement using XEP
-	public static void generateSampleMissions(Statement myStatement, Event xepEvent){
-		// Get stock names (JDBC)
-		ResultSet myRS = myStatement.executeQuery("SELECT distinct name FROM demo.stock");
-											
-		// Create java objects and store to database (XEP)
-		ArrayList<StockInfo> stocksList = new ArrayList<StockInfo>();
-		while(myRS.next())
-		{
-			StockInfo stock = new StockInfo();
-			stock.name = myRS.getString("name");
-			System.out.println("Created stockinfo array.");
-			
-			//generate mission and founder names (Native API)
-			stock.founder = "test founder";
-			stock.mission = "some mission statement";
-			
-			System.out.println("Adding object with name " + stock.name + " founder " + stock.founder + " and mission " + stock.mission);
-			stocksList.add(stock);
-		}
-		StockInfo[] stocksArray = stocksList.toArray(new StockInfo[stocksList.size()]);
-		
-		xepEvent.store(stocksArray);
-	}	
-
 	// Helper method: Get connection details from config file
 	public static HashMap<String, String> getConfig(String filename) throws FileNotFoundException, IOException{
         // Initial empty map to store connection details
@@ -145,7 +117,7 @@ public class multiplayTask3 {
         String line;
 
         // Using Buffered Reader to read file
-        BufferedReader reader = new BufferedReader(new InputStreamReader(multiplayTask3.class.getResourceAsStream(filename)));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(multiplayTask2.class.getResourceAsStream(filename)));
 
         while ((line = reader.readLine()) != null)
         {

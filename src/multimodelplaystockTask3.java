@@ -1,11 +1,5 @@
 /*
-* PURPOSE: This code shows how to use relational (JDBC), object (XEP), and native access side-by-side,
-* specifically to store stock company information.
-*
-* This last task adds functionality to populate test values by calling existing populate methods within InterSystems IRIS using the Native API.
-*   - JDBC is used to quickly retrieve all distinct stock names from the Demo.Stock table.
-*   - Native API is used to call population methods within InterSystems IRIS for founder and mission statement.
-*   - XEP is used to store these objects directly to the database, avoiding any translation back to tables.
+* PURPOSE: Create StockInfo objects that can be manipulated
 */
 
 import java.sql.ResultSet;
@@ -16,7 +10,6 @@ import java.util.HashMap;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.InputStreamReader;
 
 import com.intersystems.jdbc.IRIS;
@@ -28,7 +21,7 @@ import Demo.StockInfo;
 
 import com.intersystems.jdbc.IRISConnection;
 
-public class multiplayTask4 {
+public class multiplayTask3 {
 
 	public static void main(String[] args) {
 		// Initialize map to store connection details from config.txt
@@ -85,7 +78,7 @@ public class multiplayTask4 {
 					generateSampleMissions(myStatement, xepEvent);
 					break;
 				case "3":
-					populateMissions(myStatement, xepEvent);
+					System.out.println("TO DO: Populate values for founders and mission statements");
 					break;
 				case "4":
 					System.out.println("Exited.");
@@ -94,9 +87,8 @@ public class multiplayTask4 {
 				default: 
 					System.out.println("Invalid option. Try again!");
 					break;
-				}
-	        System.out.println("Generating stock info table...");
-					
+				}	
+			}				
 			// Close everything
 		    xepEvent.close();
 		    xepPersister.close();
@@ -107,7 +99,7 @@ public class multiplayTask4 {
 	        
 	}
 
-		// Query all stock names using ADO.NET
+	// Query all stock names using ADO.NET
 	public static void retrieveStock(Statement myStatement){
 		System.out.println("Generating stock info table...");
 			
@@ -143,32 +135,6 @@ public class multiplayTask4 {
 		StockInfo[] stocksArray = stocksList.toArray(new StockInfo[stocksList.size()]);
 		
 		xepEvent.store(stocksArray);
-	}
-
-	// Generate and store sample founder and mission statement using XEP
-	public static void populateMissions(Statement myStatement, Event xepEvent){
-		// Get stock names (JDBC)
-		ResultSet myRS = myStatement.executeQuery("SELECT distinct name FROM demo.stock");
-		
-											
-		// Create java objects and store to database (XEP)
-		ArrayList<StockInfo> stocksList = new ArrayList<StockInfo>();
-		while(myRS.next())
-		{
-			StockInfo stock = new StockInfo();
-			stock.name = myRS.getString("name");
-			System.out.println("created stockinfo array.");
-			
-			//generate mission and founder names (Native API)
-			stock.founder = irisNative.classMethodString("%PopulateUtils", "Name");
-			stock.mission = irisNative.classMethodString("%PopulateUtils", "Mission");
-			
-			System.out.println("Adding object with name " + stock.name + " founder " + stock.founder + " and mission " + stock.mission);
-			stocksList.add(stock);
-		}
-		StockInfo[] stocksArray = stocksList.toArray(new StockInfo[stocksList.size()]);
-		
-		xepEvent.store(stocksArray);
 	}	
 
 	// Helper method: Get connection details from config file
@@ -179,7 +145,7 @@ public class multiplayTask4 {
         String line;
 
         // Using Buffered Reader to read file
-        BufferedReader reader = new BufferedReader(new InputStreamReader(multiplayTask1.class.getResourceAsStream(filename)));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(multiplayTask3.class.getResourceAsStream(filename)));
 
         while ((line = reader.readLine()) != null)
         {
