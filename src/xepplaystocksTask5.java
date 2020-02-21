@@ -64,9 +64,10 @@ public class xepplaystocksTask5 {
 				System.out.println("1. Make a trade (do not save)");
 				System.out.println("2. Confirm all trades");
 				System.out.println("3. Generate and save multiple trades");
-				System.out.println("4. Retrieve all trades; show execution statistics");
-				System.out.println("5. JDBC Comparison - Create and save multiple trades");
-				System.out.println("6. Quit");
+				System.out.println("4. JDBC Comparison - Create and save multiple trades");
+				System.out.println("5. Retrieve all trades; show execution statistics");
+				System.out.println("6. Update all trades; show execution statistics");
+				System.out.println("7. Quit");
 				System.out.print("What would you like to do? ");
 				
 				String option = scanner.next();
@@ -113,11 +114,6 @@ public class xepplaystocksTask5 {
 					System.out.println("Execution time: " + totalStore + "ms");
 					break;
 				case "4":
-					System.out.println("Fetching all. Please wait...");	
-					Long totalFetch = ViewAll(xepEvent);
-					System.out.println("Execution time: " + totalFetch + "ms");
-					break;
-				case "5":
 					System.out.print("How many items to generate using JDBC? ");
 					int numberJDBC = scanner.nextInt();
 					
@@ -128,7 +124,15 @@ public class xepplaystocksTask5 {
 					Long totalJDBCStore = StoreUsingJDBC(xepPersister,sampleArray);
 					System.out.println("Execution time: " + totalJDBCStore + "ms");
 					break;
+				case "5":
+					System.out.println("Fetching all. Please wait...");	
+					Long totalFetch = ViewAll(xepEvent);
+					System.out.println("Execution time: " + totalFetch + "ms");
+					break;
 				case "6":
+					System.out.println("TO DO: Update all trades; show execution statistics");
+					break;
+				case "7":
 					System.out.println("Exited.");
 					always = false;
 					break;
@@ -180,27 +184,6 @@ public class xepplaystocksTask5 {
 		return totalTime;
 	}
 
-	// Iterate over all trades
-	public static Long ViewAll(Event xepEvent)
-	{
-		// Create and execute query using EventQuery
-		String sqlQuery = "SELECT * FROM Demo.Trade WHERE purchaseprice > ? ORDER BY stockname, purchaseDate"; 
-		EventQuery<Trade> xepQuery = xepEvent.createQuery(sqlQuery);
-		xepQuery.setParameter(1,"0");    // find stocks purchased > $0/share (all)
-		Long startTime = System.currentTimeMillis();
-		xepQuery.execute();            
-
-		// Iterate through and write names of stocks using EventQueryIterator
-		EventQueryIterator<Trade> xepIter = xepQuery.getIterator();
-		while (xepIter.hasNext()) {
-		  Trade newSample = xepIter.next();
-		  System.out.println(newSample.stockName + "\t" + newSample.purchasePrice + "\t" + newSample.purchaseDate);
-		}
-		Long totalTime = System.currentTimeMillis() - startTime;
-		xepQuery.close();
-		return totalTime;
-	}
-
 	// Save array of trade into database using JDBC - which is slower than using xepEvent
 	public static Long StoreUsingJDBC(EventPersister persist, Trade[] sampleArray)
 	{
@@ -228,6 +211,27 @@ public class xepplaystocksTask5 {
 			System.out.println("There was a problem storing items using JDBC");
 			e.getMessage();
 		}
+		return totalTime;
+	}
+
+		// Iterate over all trades
+	public static Long ViewAll(Event xepEvent)
+	{
+		// Create and execute query using EventQuery
+		String sqlQuery = "SELECT * FROM Demo.Trade WHERE purchaseprice > ? ORDER BY stockname, purchaseDate"; 
+		EventQuery<Trade> xepQuery = xepEvent.createQuery(sqlQuery);
+		xepQuery.setParameter(1,"0");    // find stocks purchased > $0/share (all)
+		Long startTime = System.currentTimeMillis();
+		xepQuery.execute();            
+
+		// Iterate through and write names of stocks using EventQueryIterator
+		EventQueryIterator<Trade> xepIter = xepQuery.getIterator();
+		while (xepIter.hasNext()) {
+		  Trade newSample = xepIter.next();
+		  System.out.println(newSample.stockName + "\t" + newSample.purchasePrice + "\t" + newSample.purchaseDate);
+		}
+		Long totalTime = System.currentTimeMillis() - startTime;
+		xepQuery.close();
 		return totalTime;
 	}
 

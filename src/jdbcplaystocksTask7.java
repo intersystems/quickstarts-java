@@ -281,7 +281,7 @@ public class jdbcplaystocksTask7 {
 			myStatement.setString(1,sellDate);
 			ResultSet myStocksRS = myStatement.executeQuery();
 
-			System.out.println("Name\tPurchase Date\tPurchase Price\tStock Close\tShares\tDatetime Updated\t% Change\tGain or Loss");
+			System.out.println("Name\tPurchase Date\tPurchase Price\tStock Close\tShares\tDatetime Updated\t\t% Change\tGain or Loss");
 
 			while (myStocksRS.next())
 			{
@@ -300,8 +300,8 @@ public class jdbcplaystocksTask7 {
 				cumulStartValue = cumulStartValue.add(startValue);
 				cumulEndValue = cumulEndValue.add(endValue);
 
-				System.out.println(name + "\t" + purchaseDate + "\t" + purchasePrice + "\t" + stockClose + "\t" + shares + "\t"
-						+ dateTimeUpdated + "\t" + percentChange + "\t" + gainOrLoss);
+				System.out.println(name + "\t" + purchaseDate + "\t" + purchasePrice + "\t\t" + stockClose + "\t" + shares + "\t"
+						+ dateTimeUpdated + "\t\t" + percentChange + "\t" + gainOrLoss);
 			}
 		} 
 		catch (SQLException e) 

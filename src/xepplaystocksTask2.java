@@ -62,9 +62,10 @@ public class xepplaystocksTask2 {
 				System.out.println("1. Make a trade (do not save)");
 				System.out.println("2. Confirm all trades");
 				System.out.println("3. Generate and save multiple trades");
-				System.out.println("4. Retrieve all trades; show execution statistics");
-				System.out.println("5. JDBC Comparison - Create and save multiple trades");
-				System.out.println("6. Quit");
+				System.out.println("4. JDBC Comparison - Create and save multiple trades");
+				System.out.println("5. Retrieve all trades; show execution statistics");
+				System.out.println("6. Update all trades; show execution statistics");
+				System.out.println("7. Quit");
 				System.out.print("What would you like to do? ");
 
 				String option = scanner.next();
@@ -103,12 +104,15 @@ public class xepplaystocksTask2 {
 					System.out.println("TO DO: Generate and save multiple trades");	
 					break;
 				case "4":
-					System.out.println("TO DO: Retrieve all trades");
-					break;
-				case "5":
 					System.out.println("TO DO: JDBC Comparison - Create and save multiple trades");
+					break;	
+				case "5":
+					System.out.println("TO DO: Retrieve all trades; show execution statistics");
 					break;
 				case "6":
+					System.out.println("TO DO: Update all trades; show execution statistics");
+					break;
+				case "7":
 					System.out.println("Exited.");
 					always = false;
 					break;

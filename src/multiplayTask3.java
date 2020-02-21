@@ -51,7 +51,6 @@ public class multiplayTask3 {
 	        xepPersister.deleteExtent("Demo.StockInfo");   // Remove old test data
 	        xepPersister.importSchema("Demo.StockInfo");   // Import flat schema
 	       
-	        //***Initializations***
 	        // Create XEP Event for object access
 	        Event xepEvent = xepPersister.getEvent("Demo.StockInfo");
 
@@ -61,33 +60,35 @@ public class multiplayTask3 {
 	        // Create IRIS Native object
 	        IRIS irisNative = IRIS.createIRIS((IRISConnection)xepPersister);
 	        
-	        
-	        //***Running code***
-	        System.out.println("Generating stock info table...");
-			
-			// Get stock names (JDBC)
-			ResultSet myRS = myStatement.executeQuery("SELECT distinct name FROM demo.stock");
-			
-												
-			// Create java objects and store to database (XEP)
-			ArrayList<StockInfo> stocksList = new ArrayList<StockInfo>();
-			while(myRS.next())
-			{
-				StockInfo stock = new StockInfo();
-				stock.name = myRS.getString("name");
-				System.out.println("created stockinfo array.");
-				
-				//generate mission and founder names (Native API)
-				stock.founder = "test founder";
-				stock.mission = "some mission statement";
-				
-				System.out.println("Adding object with name " + stock.name + " founder " + stock.founder + " and mission " + stock.mission);
-				stocksList.add(stock);
-			}
-			StockInfo[] stocksArray = stocksList.toArray(new StockInfo[stocksList.size()]);
-			
-			xepEvent.store(stocksArray);
-					
+			boolean always = true;
+			Scanner scanner = new Scanner(System.in);
+			while (always) {
+				System.out.println("1. Retrieve all stock names using ADO.NET");
+				System.out.println("2. Generate sample founders and mission statements using XEP");
+				System.out.println("3. Populate values for founders and mission statements using Native API");
+				System.out.println("4. Quit");
+				System.out.print("What would you like to do? ");
+
+				String option = scanner.next();
+				switch (option) {
+				case "1":
+					retrieveStock(myStatement);
+					break;
+				case "2":
+					generateSampleMissions(myStatement, xepEvent);
+					break;
+				case "3":
+					System.out.println("TO DO: Populate values for founders and mission statements");
+					break;
+				case "4":
+					System.out.println("Exited.");
+					always = false;
+					break;
+				default: 
+					System.out.println("Invalid option. Try again!");
+					break;
+				}	
+	        					
 			// Close everything
 		    xepEvent.close();
 		    xepPersister.close();
@@ -97,6 +98,44 @@ public class multiplayTask3 {
 		}
 	        
 	}
+
+	// Query all stock names using ADO.NET
+	public static void retrieveStock(Statement myStatement){
+		System.out.println("Generating stock info table...");
+			
+		// Get stock names (JDBC)
+		ResultSet myRS = myStatement.executeQuery("SELECT distinct name FROM demo.stock");
+					
+		while(myRS.next())
+		{
+			System.out.println(myRS.getString("name"));		
+		}
+	}
+
+	// Generate and store sample founder and mission statement using XEP
+	public static void generateSampleMissions(Statement myStatement, Event xepEvent){
+		// Get stock names (JDBC)
+		ResultSet myRS = myStatement.executeQuery("SELECT distinct name FROM demo.stock");
+											
+		// Create java objects and store to database (XEP)
+		ArrayList<StockInfo> stocksList = new ArrayList<StockInfo>();
+		while(myRS.next())
+		{
+			StockInfo stock = new StockInfo();
+			stock.name = myRS.getString("name");
+			System.out.println("Created stockinfo array.");
+			
+			//generate mission and founder names (Native API)
+			stock.founder = "test founder";
+			stock.mission = "some mission statement";
+			
+			System.out.println("Adding object with name " + stock.name + " founder " + stock.founder + " and mission " + stock.mission);
+			stocksList.add(stock);
+		}
+		StockInfo[] stocksArray = stocksList.toArray(new StockInfo[stocksList.size()]);
+		
+		xepEvent.store(stocksArray);
+	}	
 
 	// Helper method: Get connection details from config file
 	public static HashMap<String, String> getConfig(String filename) throws FileNotFoundException, IOException{

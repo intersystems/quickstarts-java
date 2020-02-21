@@ -62,7 +62,8 @@ public class nativeplaystocksTask2 {
 				System.out.println("2. Store stock data");
 				System.out.println("3. View stock data");
 				System.out.println("4. Generate Trades");
-				System.out.println("5. Quit");
+				System.out.println("5. Call Routines");
+				System.out.println("6. Quit");
 				System.out.print("What would you like to do? ");
 
 				String option = scanner.next();
@@ -80,6 +81,9 @@ public class nativeplaystocksTask2 {
 					System.out.println("TO DO: Generate trades");
 					break;
 				case "5":
+					System.out.println("TO DO: Call routine");
+					break;
+				case "6":
 					System.out.println("Exited.");
 					always = false;
 					break;
