@@ -1,5 +1,5 @@
 ip: localhost
 port: 51773
-namespace: user
-username: superuser
+namespace: tech
+username: demo
 password: SYS
