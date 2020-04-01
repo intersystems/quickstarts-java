@@ -3,7 +3,6 @@
 *  and routines in InterSystems IRIS.
 * 
 * NOTES: When running,
-* 1. Notice the version of InterSystems IRIS automatically printed. This calls a routine within InterSystems IRIS.
 * 1. Choose option 2 to store stock data natively.
 * 2. Choose option 3 to retrieve stock data natively.
 * 3. Choose option 4 to generate trades with random data using methods from InterSystems IRIS.

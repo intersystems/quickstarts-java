@@ -131,7 +131,7 @@ public class xepplaystocksTask6 {
 					break;
 				case "6":
 					System.out.println("Fetching all. Please wait...");	
-					Long totalFetch = ViewAllAfterUpdate(xepEvent);
+					totalFetch = ViewAllAfterUpdate(xepEvent);
 					System.out.println("Execution time: " + totalFetch + "ms");
 					break;
 				case "7":
