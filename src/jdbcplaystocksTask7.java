@@ -300,7 +300,7 @@ public class jdbcplaystocksTask7 {
 				cumulStartValue = cumulStartValue.add(startValue);
 				cumulEndValue = cumulEndValue.add(endValue);
 
-				System.out.println(name + "\t" + purchaseDate + "\t" + purchasePrice + "\t\t" + stockClose + "\t" + shares + "\t"
+				System.out.println(name + "\t" + purchaseDate + "\t" + purchasePrice + "\t" + stockClose + "\t" + shares + "\t"
 						+ dateTimeUpdated + "\t\t" + percentChange + "\t" + gainOrLoss);
 			}
 		} 
