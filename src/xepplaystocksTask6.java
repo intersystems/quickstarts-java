@@ -193,7 +193,7 @@ public class xepplaystocksTask6 {
 		
 		// Loop through objects to insert
 		try {
-			String sql = "INSERT INTO Demo.Trade (purchaseDate,purchaseprice,stockName) VALUES (?,?,?)";
+			String sql = "INSERT INTO Demo.Trade (purchaseDate,purchaseprice,stockName, shares, traderName) VALUES (?,?,?,?, ?)";
 	
 			PreparedStatement myStatement = persist.prepareStatement(sql);
 			myStatement.setString(1, "2016-08-12");
@@ -205,6 +205,8 @@ public class xepplaystocksTask6 {
 			{
 				myStatement.setBigDecimal(2, sampleArray[i].purchasePrice);
 				myStatement.setString(3, sampleArray[i].stockName);
+				myStatement.setInt(4, sampleArray[i].shares);
+				myStatement.setString(5, sampleArray[i].traderName);
 				myStatement.addBatch();
 			}
 			myStatement.executeBatch();
