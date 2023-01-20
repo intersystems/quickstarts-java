@@ -1,2 +1,4 @@
 # Java QuickStart Code Sample
-Instructions for the *[Java QuickStart](https://gettingstarted.intersystems.com/language-quickstarts/java-quickstart)* are available on GettingStarted.InterSystems.com.
+With Java, you can interact with InterSystems IRIS relationally (with JDBC), using objects (with XEP or Hibernate), or natively (with the Native API).
+
+Instructions for the *[Java exercise](https://learning.intersystems.com/course/view.php?name=Java%20QS)* are available on InterSystems Learning site.
