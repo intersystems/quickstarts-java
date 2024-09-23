@@ -1,5 +1,7 @@
 # quickstarts-java
-This code shows JDBC, XEP, Native, multi-model, and Hibernate access. It is required for the Java quickstart which can be found here: https://learning.intersystems.com/course/view.php?name=Java%20QS 
+This code shows how to connect a Java application to an InterSystems server using JDBC, XEP, Hibernate, the Native Java API, and multi-model programming. 
+
+This repository is used in the [Java QuickStart](https://learning.intersystems.com/course/view.php?name=Java%20QS).
 
 ## Contents
 * jdbcplaystocksTask7.java to see how to store and retrieve data relationally
@@ -9,25 +11,28 @@ This code shows JDBC, XEP, Native, multi-model, and Hibernate access. It is requ
 * hibernateplaystocksTask6.java to see how to use a third-party tool to work with objects
 
 ## Configuration files
-`config.txt`: contains connection details for JDBC, XEP, Native API and multi-model.  
-`hibernate.cfg.xml`: located in **src** folder, contains connections details, parameters and initial settings for Hibernate.
+`src/Solutions/config.txt`: contains connection details for JDBC, XEP, Native API and multi-model.  
+`src/hibernate.cfg.xml`: contains connections details, parameters and initial settings for Hibernate.
 
-## How to Run
+## How to use this sample
 
-1.  Verify you have an [<span class="urlformat">instance of InterSystems IRIS</span>](https://learning.intersystems.com/course/view.php?name=Get%20InterSystems%20IRIS), and an IDE that supports Node.js (such as **Visual Studio Code**). If you are using AWS, Azure, or GCP, that you have followed the steps to [change the password for InterSystems IRIS](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ACLOUD#ACLOUD_interact).
-2. If you are using AWS, GCP, or Microsoft Azure, load the sample stock data into InterSystems IRIS:  
-    `$ iris load http://github.com/intersystems/Samples-Stock-Data`  
-If you are using InterSystems Labs, the sample stock data is already loaded. You can skip to the next step.
-3. Clone the repo and open it in your IDE.
-4. With Eclipse,
-	* Select **File** > **Import** > **Git** > **Projects from Git**. Click **Next**.
-	* Enter URI: https://github.com/intersystems/quickstarts-java
-	* Select the **master** branch. Click **Next**.
-	* Choose import existing project. Click **Next**.
-	* Click **Finish**.
-	* Open `config.txt` file, located inside the **Solutions** package, and modify the `IP` and `password` to be the correct values for your InterSystems IRIS instance. Although `port` and `username` are most likely the defaults, you should verify those as well.
-	* Due to its complexity, **Hibernate** has its own config file named `hibernate.cfg.xml`. Open `hibernate.cfg.xml` file, located inside the **src** folder, and modify the `IP` and `password` to be the correct values for your InterSystems IRIS instance. Althoug `port` and `username` are most likely the defaults, you should verify those as well.
+1.  Verify you have an [<span class="urlformat">InterSystems server</span>](https://learning.intersystems.com/course/view.php?name=Get%20InterSystems%20IRIS), and an IDE that supports Java, such as **Visual Studio Code**. 
+2. Clone this repo and open it in your IDE.
+3. Get the latest Java drivers from your InterSystems installation directory and place them in the lib folder. See InterSystems documentation full instructions on (getting the latest InterSystems Java drivers)[https://docs.intersystems.com/components/csp/docbook/DocBook.UI.Page.cls?KEY=ADRIVE#ADRIVE_jdbc].
+4. Import and compile two class files within iris-load into the USER namespace on your InterSystems server
+    do $system.OBJ.Load(path_"DemoStockCls.xml")
+    compile
+    do $system.OBJ.Load(path_"StocksUtil.xml")
+    compile
+5. Load data from iris-load into the USER namespace on your InterSystems server
+    do ##class(Demo.Stock).LoadData(path_"all_stocks_1yr.csv")
+6. Open `config.txt` file, located inside the **Solutions** package, and modify the `IP` and `password` to be the correct values for your InterSystems IRIS instance. Although `port` and `username` are most likely the defaults, you should verify those as well.
+
+## How to use the Hibernate sample
+1. Follow the instructions in InterSystems documentation for [setting up Hibernate drivers](https://docs.intersystems.com/iris20243/csp/docbook/DocBook.UI.Page.cls?KEY=BTPI_hibernate#BTPI_hibernate_install).
+
+2. Due to its complexity, **Hibernate** has its own config file named `hibernate.cfg.xml`. Open `hibernate.cfg.xml` file, located inside the **src** folder, and modify the `IP` and `password` to be the correct values for your InterSystems IRIS instance. Althoug `port` and `username` are most likely the defaults, you should verify those as well.
 
 You should now have several classes for **JDBC**, **XEP**, **Native API**, **multi-model** and **Hibernate** inside the **Solutions** package. 
 
-Detailed instructions are included on the QuickStart page: https://learning.intersystems.com/course/view.php?name=Java%20QS 
+Detailed instructions are included on the QuickStart page: https://learning.intersystems.com/course/view.php?name=Java%20QS
