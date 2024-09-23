@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25" zv="IRIS for Windows (x86-64) 2018.1.1 (Build 522U)" ts="2018-04-05 15:07:10">
+<Class name="Demo.Stock">
+<Super>%Persistent</Super>
+<TimeChanged>64741,35080.080605</TimeChanged>
+<TimeCreated>64685,57614.490676</TimeCreated>
+
+<Property name="TransDate">
+<Type>%Date</Type>
+</Property>
+
+<Index name="TDX">
+<Properties>TransDate</Properties>
+</Index>
+
+<Property name="StockOpen">
+<Type>%Numeric</Type>
+<Parameter name="SCALE" value="4"/>
+</Property>
+
+<Property name="High">
+<Type>%Numeric</Type>
+<Parameter name="SCALE" value="4"/>
+</Property>
+
+<Property name="Low">
+<Type>%Numeric</Type>
+<Parameter name="SCALE" value="4"/>
+</Property>
+
+<Property name="StockClose">
+<Type>%Numeric</Type>
+<Parameter name="SCALE" value="4"/>
+</Property>
+
+<Property name="Volume">
+<Type>%Integer</Type>
+</Property>
+
+<Property name="Name">
+<Type>%String</Type>
+</Property>
+
+<Index name="NameX">
+<Type>bitmap</Type>
+<Properties>Name</Properties>
+</Index>
+
+<Method name="LoadData">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>FileLocation:%String="/tmp/irisupdate/all_stocks_1yr.csv"</FormalSpec>
+<ReturnType>%String</ReturnType>
+<Implementation><![CDATA[
+		set status = $$$OK
+		
+		try {
+			set stream = ##class(%Stream.FileCharacter).%New()
+			set sc = stream.LinkToFile(FileLocation)
+			set line = stream.ReadLine() //don't use headers for anything
+			while 'stream.AtEnd {
+				set line = stream.ReadLine()
+				set stock = ##class(Demo.Stock).%New()
+				set stock.TransDate = $zdateh($piece(line,",",1))
+				set stock.StockOpen = $piece(line,",",2)
+				set stock.High = $piece(line,",",3)
+				set stock.Low = $piece(line,",",4)
+				set stock.StockClose = $piece(line,",",5)
+				set stock.Volume = $piece(line,",",6) 
+				set stock.Name = $zstrip($piece(line,",",7),"*C")
+				set status = stock.%Save()
+			}
+		} catch sc {
+			write "In Catch block",!
+    		write "error code: ",sc.Code,!
+    		write "error location: ",sc.Location,!
+    		write "error data:",$LISTGET(sc.Data,2),!	
+		}
+		quit status
+]]></Implementation>
+</Method>
+
+</Class>
+</Export>

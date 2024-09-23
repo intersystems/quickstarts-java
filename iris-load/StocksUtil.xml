@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2016.2 (Build 645U)" ts="2018-03-15 16:17:00">
+<Routine name="StocksUtil" type="MAC" languagemode="0" timestamp="64722,55976.644391"><![CDATA[
+PrintVersion() public {
+	Quit $ZVERSION
+}
+]]></Routine>
+</Export>
