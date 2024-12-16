@@ -67,9 +67,7 @@ public class nativeplaystocksTask5 {
 			IRISConnection dbconnection = (IRISConnection) ds.getConnection();
 			System.out.println("Connected to InterSystems IRIS via JDBC.");
 					
-			// Create IRIS Native and call routines directly
 			IRIS irisNative = IRIS.createIRIS(dbconnection);
-			System.out.println("on InterSystems IRIS version: " + irisNative.functionString("PrintVersion","^StocksUtil"));
 					
 			boolean always = true;
 			Scanner scanner = new Scanner(System.in);
